@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Set viewport to ensure proper scaling on mobile devices -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Music Player Design</title>
+    <!-- Link to external CSS file for styling -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Link to Font Awesome for icons -->
+    <script src="https://kit.fontawesome.com/e636fe22ee.js" crossorigin="anonymous"></script>
+</head>
+<body>
+<div class="container">
+    <div class="music-player">
+        <!-- Navigation bar with icons -->
+        <nav>
+            <div class="circle">
+                <i class="fa-solid fa-angle-left"></i> <!-- Back button icon -->
+            </div>
+            <div class="circle">
+                <i class="fa-solid fa-bars"></i> <!-- Menu button icon -->
+            </div>
+        </nav>
+        <!-- Display song image -->
+        <img src="media/Cant Stop image.jpg" class="song-img">
+        <!-- Display song title -->
+        <h1>Can't Stop</h1>
+        <!-- Display artist name -->
+        <p>Red Hot Chili Peppers</p>
+
+        <!-- Audio element with source file -->
+        <audio id="song">
+            <source src="media/Cant Stop.mp3" type="audio/mpeg">
+        </audio>
+        <!-- Progress bar for the song -->
+        <input type="range" value="0" id="progress">
+
+        <!-- Control buttons (previous, play/pause, next) -->
+        <div class="controls">
+            <div><i class="fa-solid fa-backward"></i></div> <!-- Previous button -->
+            <div onclick="playPause()"><i class="fa-solid fa-play" id="ctrlIcon"></i></div> <!-- Play/Pause button -->
+            <div><i class="fa-solid fa-forward"></i></div> <!-- Next button -->
+        </div>
+    </div>
+</div>
+
+<script>
+    // Get references to the progress bar, audio element, and control icon
+    let progress = document.getElementById("progress");
+    let song = document.getElementById("song");
+    let ctrlIcon = document.getElementById("ctrlIcon");
+
+    // Set the maximum value of the progress bar to the duration of the song once metadata is loaded
+    song.onloadedmetadata = function(){
+        progress.max = song.duration;
+        progress.value = song.currentTime;
+    }
+
+    // Function to play or pause the song and update the control icon
+    function playPause(){
+        if(ctrlIcon.classList.contains("fa-pause")){
+            song.pause();
+            ctrlIcon.classList.remove("fa-pause");
+            ctrlIcon.classList.add("fa-play");
+        }
+        else{
+            song.play();
+            ctrlIcon.classList.add("fa-pause");
+            ctrlIcon.classList.remove("fa-play");
+        }
+    }
+
+    // Update the progress bar every 500 milliseconds if the song is playing
+    if(song.play()){
+        setInterval(()=>{
+            progress.value = song.currentTime;
+        }, 500);
+    }
+
+    // Update the song's current time when the progress bar is changed
+    progress.onchange = function(){
+        song.play();
+        song.currentTime = progress.value;
+        ctrlIcon.classList.add("fa-pause");
+        ctrlIcon.classList.remove("fa-play");
+    }
+</script>
+
+</body>
+</html>
